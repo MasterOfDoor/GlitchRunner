@@ -62,4 +62,4 @@ namespace GlitchRunner.Inventory
             if (b < slotUIs.Length) slotUIs[b].Refresh(slots[b]);
         }
     }
-
+}
