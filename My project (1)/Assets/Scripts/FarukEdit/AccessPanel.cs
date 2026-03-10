@@ -2,114 +2,93 @@ using System.Collections;
 using UnityEngine;
 using TMPro;
 
-/// <summary>
-/// KURULUM:
-/// 1. Panel objesi (Sprite) → bu script + DoorController yok, sadece bu
-/// 2. TMP Text child → "ERİŞİM REDDEDİLDİ"
-/// 3. Trigger collider (herhangi bir obje) → AccessPanelTrigger.cs
-/// </summary>
+/// Sadece TMP Text objesine ekle.
+/// Trigger'a değince glitch + fade ile yok olur.
 public class AccessPanel : MonoBehaviour
 {
-    [Header("Referanslar")]
-    [SerializeField] private TMP_Text    panelText;
-    [SerializeField] private SpriteRenderer panelSprite;
+    [Header("Referans")]
+    [SerializeField] private TMP_Text label;
 
     [Header("Renkler")]
-    [SerializeField] private Color redColor  = new Color(1f, 0.06f, 0.25f);   // #FF0F40
-    [SerializeField] private Color scanColor = new Color(0f, 0.9f,  1f, 0.15f); // cyan scan
+    [SerializeField] private Color colorA = new Color(1f, 0.06f, 0.25f);  // #FF0F40
+    [SerializeField] private Color colorB = new Color(0f, 1f,   0.53f);   // #00FF88
 
     [Header("Efekt")]
-    [SerializeField] private float glitchDuration  = 0.5f;
-    [SerializeField] private float fadeDuration    = 0.4f;
+    [SerializeField] private float glitchDuration = 0.5f;
+    [SerializeField] private float fadeDuration   = 0.35f;
 
-    // Yazı varyasyonları — glitch efekti için
-    readonly string[] _lines =
+    static readonly string[] GlitchPool =
     {
         "ERİŞİM\nREDDEDİLDİ",
-        "3Rİ$İM\nR3DD3D İLDİ",
-        "ER|Ş|M\nR▓DD▓D|LD|",
+        "3Rİ$İM\nR3DD3D|LD|",
+        "ER|Ş|M\n▓EDD▓D|LD|",
+        "█RİŞ█M\n█EDDEDILDI",
         "E̷R̷İ̷Ş̷İ̷M̷\nR̷E̷D̷D̷E̷D̷İ̷L̷D̷İ̷",
-        "█RİŞİM\n█EDDEDILDI",
+        "҉ERİŞİM҉\nREDDEDİLDİ",
     };
 
-    bool _triggered;
+    bool _done;
+    float _t;
 
-    // ── Pulsing kırmızı — Update'te ─────────────────────────
-    float _pulseT;
+    void Awake()
+    {
+        if (label == null) label = GetComponent<TMP_Text>();
+        if (label == null) label = GetComponentInChildren<TMP_Text>();
+        if (label == null)
+        {
+            Debug.LogError("[AccessPanel] TMP_Text bulunamadı! Label alanını Inspector'dan bağla.");
+            return;
+        }
+        label.text  = " // access\ndenied";
+        label.color = colorA;
+    }
 
+    // sürekli nabız
     void Update()
     {
-        if (_triggered) return;
-
-        // Yazı parlaklık nabzı
-        _pulseT += Time.deltaTime * 2.2f;
-        float brightness = 0.6f + 0.4f * Mathf.Sin(_pulseT);
-        if (panelText != null)
-            panelText.color = redColor * brightness + Color.white * (brightness * 0.08f);
+        if (_done || label == null) return;
+        _t += Time.deltaTime * 2.5f;
+        float b = 0.55f + 0.45f * Mathf.Sin(_t);
+        label.color = Color.Lerp(colorA * b, colorA, 0.3f);
     }
 
-    // ── Dışarıdan tetiklenir ─────────────────────────────────
     public void Dismiss()
     {
-        if (_triggered) return;
-        _triggered = true;
-        StartCoroutine(DismissSequence());
+        if (_done) return;
+        _done = true;
+        StartCoroutine(Sequence());
     }
 
-    IEnumerator DismissSequence()
+    IEnumerator Sequence()
     {
-        // 1. Hızlı glitch
-        yield return StartCoroutine(GlitchOut());
-
-        // 2. Fade out
-        yield return StartCoroutine(FadeOut());
-
-        // 3. Tamamen yok et
-        gameObject.SetActive(false);
-    }
-
-    IEnumerator GlitchOut()
-    {
-        if (panelText == null) yield break;
-
+        // 1 — glitch
         float t = 0f;
         while (t < glitchDuration)
         {
-            panelText.text  = _lines[Random.Range(0, _lines.Length)];
-            panelText.color = Random.value > 0.5f
-                ? redColor
-                : new Color(1f, 1f, 1f, Random.Range(0.3f, 1f));
+            label.text  = GlitchPool[Random.Range(0, GlitchPool.Length)];
+            label.color = Random.value > 0.5f ? colorA : colorB;
 
-            // Panel hafif sarsıntısı
-            if (panelSprite != null)
-                panelSprite.transform.localPosition = new Vector3(
-                    Random.Range(-0.04f, 0.04f), 0f, 0f);
+            // yatay kayma
+            label.transform.localPosition = new Vector3(
+                Random.Range(-6f, 6f), Random.Range(-2f, 2f), 0f);
 
             t += Time.deltaTime;
-            yield return new WaitForSeconds(0.04f);
+            yield return new WaitForSeconds(0.035f);
         }
 
-        // Sıfırla
-        if (panelSprite != null)
-            panelSprite.transform.localPosition = Vector3.zero;
-    }
+        label.transform.localPosition = Vector3.zero;
 
-    IEnumerator FadeOut()
-    {
-        float t = 0f;
-
-        Color startText   = panelText   != null ? panelText.color   : Color.white;
-        Color startSprite = panelSprite != null ? panelSprite.color  : Color.white;
-
+        // 2 — fade out
+        t = 0f;
         while (t < 1f)
         {
             t += Time.deltaTime / fadeDuration;
-            float alpha = 1f - t;
-
-            if (panelText   != null) { var c = startText;   c.a = alpha; panelText.color   = c; }
-            if (panelSprite != null) { var c = startSprite; c.a = alpha; panelSprite.color = c; }
-
+            Color c = label.color;
+            c.a = 1f - t;
+            label.color = c;
             yield return null;
         }
+
+        gameObject.SetActive(false);
     }
 }
