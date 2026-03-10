@@ -459,6 +459,10 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1745584399708800349, guid: 274ea396f7c304841805ed40e26c44c0, type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5708892793951311276, guid: 274ea396f7c304841805ed40e26c44c0, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -500,6 +504,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 6426657859980135442, guid: 274ea396f7c304841805ed40e26c44c0, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1713612245}
+    - targetCorrespondingSourceObject: {fileID: 6426657859980135442, guid: 274ea396f7c304841805ed40e26c44c0, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1713612251}
   m_SourcePrefab: {fileID: 100100000, guid: 274ea396f7c304841805ed40e26c44c0, type: 3}
 --- !u!1 &215265058
 GameObject:
@@ -964,13 +971,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 328101318}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 90a50b8402fdf6f4b9685ccbfe66945f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RobotLabel
-  labelText: I got some shit, shit to sell
-  secondLine: Good shit, buy from me not him
+  lines: []
   interactionRadius: 2
   player: {fileID: 0}
   tmpText: {fileID: 0}
@@ -982,6 +988,27 @@ MonoBehaviour:
   autoSize: 1
   heightOffset: 1.8
   scale: 0.01
+--- !u!114 &328101332
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 328101318}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6a7e6f68625da0b45bdadc8bbc43a7e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RobotDialogueByDistance
+  interactionDistance: 2
+  lines:
+  - I got some shit
+  - shit to sell
+  - Dont buy from him
+  player: {fileID: 1917236967}
+  fontAsset: {fileID: 11400000, guid: 81db8b07940d89a42a6d1f2e4922420c, type: 2}
+  labelHeightOffset: 1.8
+  labelScale: 0.01
 --- !u!1 &391496032
 GameObject:
   m_ObjectHideFlags: 0
@@ -1227,6 +1254,10 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1745584399708800349, guid: 274ea396f7c304841805ed40e26c44c0, type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5708892793951311276, guid: 274ea396f7c304841805ed40e26c44c0, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -1262,6 +1293,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 6426657859980135442, guid: 274ea396f7c304841805ed40e26c44c0, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1709942482}
+    - targetCorrespondingSourceObject: {fileID: 6426657859980135442, guid: 274ea396f7c304841805ed40e26c44c0, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1709942488}
   m_SourcePrefab: {fileID: 100100000, guid: 274ea396f7c304841805ed40e26c44c0, type: 3}
 --- !u!1001 &460494702
 PrefabInstance:
@@ -1327,6 +1361,10 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1745584399708800349, guid: 274ea396f7c304841805ed40e26c44c0, type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5708892793951311276, guid: 274ea396f7c304841805ed40e26c44c0, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -1368,6 +1406,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 6426657859980135442, guid: 274ea396f7c304841805ed40e26c44c0, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1482634389}
+    - targetCorrespondingSourceObject: {fileID: 6426657859980135442, guid: 274ea396f7c304841805ed40e26c44c0, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1482634395}
   m_SourcePrefab: {fileID: 100100000, guid: 274ea396f7c304841805ed40e26c44c0, type: 3}
 --- !u!1001 &484557692
 PrefabInstance:
@@ -1554,6 +1595,7 @@ GameObject:
   - component: {fileID: 519420029}
   - component: {fileID: 519420030}
   - component: {fileID: 519420033}
+  - component: {fileID: 519420034}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -1694,6 +1736,23 @@ MonoBehaviour:
   target: {fileID: 1917236967}
   smoothTime: 0.15
   offset: {x: 0, y: 1, z: -10}
+--- !u!114 &519420034
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 519420028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5090f6aa3c48c154bae6512b352ea910, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CameraBounds
+  minX: -13.7
+  maxX: 13.6
+  minY: -7
+  maxY: 8
+  useCameraSize: 1
 --- !u!1 &545797154
 GameObject:
   m_ObjectHideFlags: 0
@@ -1785,6 +1844,84 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1082724388}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &547984368
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 547984369}
+  - component: {fileID: 547984370}
+  m_Layer: 0
+  m_Name: Colliderbilmem
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &547984369
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 547984368}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.09176016, y: -3.9414499, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1615988148}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!61 &547984370
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 547984368}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 2.842159, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Size: {x: 6.684317, y: 1}
+  m_EdgeRadius: 0
 --- !u!1 &553425778
 GameObject:
   m_ObjectHideFlags: 0
@@ -4591,13 +4728,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1482634380}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 90a50b8402fdf6f4b9685ccbfe66945f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RobotLabel
-  labelText: 'Do we even drink tea? '
-  secondLine: I mean do we even capable?
+  lines: []
   interactionRadius: 2
   player: {fileID: 0}
   tmpText: {fileID: 0}
@@ -4609,6 +4745,104 @@ MonoBehaviour:
   autoSize: 1
   heightOffset: 1.8
   scale: 0.01
+--- !u!114 &1482634395
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1482634380}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6a7e6f68625da0b45bdadc8bbc43a7e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RobotDialogueByDistance
+  interactionDistance: 2
+  lines:
+  - Do we even drink tea?
+  - I mean do we even CAPABLE!!
+  player: {fileID: 1917236967}
+  fontAsset: {fileID: 11400000, guid: 81db8b07940d89a42a6d1f2e4922420c, type: 2}
+  labelHeightOffset: 1.8
+  labelScale: 0.01
+--- !u!1 &1513168940
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1513168942}
+  - component: {fileID: 1513168941}
+  m_Layer: 0
+  m_Name: Colliderbilmem (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!61 &1513168941
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1513168940}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 2.842159, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Size: {x: 6.684317, y: 1}
+  m_EdgeRadius: 0
+--- !u!4 &1513168942
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1513168940}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -2.88, y: 3.3, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1588756887
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5088,6 +5322,7 @@ Transform:
   - {fileID: 865268797}
   - {fileID: 391496033}
   - {fileID: 711224723}
+  - {fileID: 547984369}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1641675770
@@ -5154,6 +5389,10 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1745584399708800349, guid: 274ea396f7c304841805ed40e26c44c0, type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5708892793951311276, guid: 274ea396f7c304841805ed40e26c44c0, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -5189,6 +5428,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 6426657859980135442, guid: 274ea396f7c304841805ed40e26c44c0, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1664870402}
+    - targetCorrespondingSourceObject: {fileID: 6426657859980135442, guid: 274ea396f7c304841805ed40e26c44c0, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1664870408}
   m_SourcePrefab: {fileID: 100100000, guid: 274ea396f7c304841805ed40e26c44c0, type: 3}
 --- !u!1 &1664870396 stripped
 GameObject:
@@ -5202,13 +5444,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1664870396}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 90a50b8402fdf6f4b9685ccbfe66945f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RobotLabel
-  labelText: "Welcome to the, uhhhh ,why am \u0131 here and you..."
-  secondLine: You dont belong here
+  lines: []
   interactionRadius: 2
   player: {fileID: 0}
   tmpText: {fileID: 0}
@@ -5220,6 +5461,29 @@ MonoBehaviour:
   autoSize: 1
   heightOffset: 1.8
   scale: 0.01
+--- !u!114 &1664870408
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1664870396}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6a7e6f68625da0b45bdadc8bbc43a7e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RobotDialogueByDistance
+  interactionDistance: 2
+  lines:
+  - Welcome to uhhh
+  - "THE CPUUU!!!,Who am \u0131 introducing this?"
+  - And you
+  - you...
+  - You dont belong here
+  player: {fileID: 1917236967}
+  fontAsset: {fileID: 11400000, guid: 81db8b07940d89a42a6d1f2e4922420c, type: 2}
+  labelHeightOffset: 1.8
+  labelScale: 0.01
 --- !u!1 &1682047989
 GameObject:
   m_ObjectHideFlags: 0
@@ -5604,15 +5868,14 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1040833275}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 90a50b8402fdf6f4b9685ccbfe66945f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RobotLabel
-  labelText: Wooooow
-  secondLine: 
+  lines: []
   interactionRadius: 3
-  player: {fileID: 0}
+  player: {fileID: 1917236967}
   tmpText: {fileID: 0}
   fontAsset: {fileID: 11400000, guid: 81db8b07940d89a42a6d1f2e4922420c, type: 2}
   textColor: {r: 0, g: 1, b: 0.53, a: 1}
@@ -5622,6 +5885,25 @@ MonoBehaviour:
   autoSize: 1
   heightOffset: 1.8
   scale: 0.01
+--- !u!114 &1709942488
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1040833275}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6a7e6f68625da0b45bdadc8bbc43a7e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RobotDialogueByDistance
+  interactionDistance: 2
+  lines:
+  - Woooooow
+  player: {fileID: 1917236967}
+  fontAsset: {fileID: 11400000, guid: 81db8b07940d89a42a6d1f2e4922420c, type: 2}
+  labelHeightOffset: 1.8
+  labelScale: 0.01
 --- !u!1 &1713612236 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6426657859980135442, guid: 274ea396f7c304841805ed40e26c44c0, type: 3}
@@ -5701,13 +5983,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1713612236}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 90a50b8402fdf6f4b9685ccbfe66945f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RobotLabel
-  labelText: I got some better shit to sell
-  secondLine: ' just felt of the cpu'
+  lines: []
   interactionRadius: 2
   player: {fileID: 0}
   tmpText: {fileID: 0}
@@ -5719,6 +6000,27 @@ MonoBehaviour:
   autoSize: 1
   heightOffset: 1.8
   scale: 0.01
+--- !u!114 &1713612251
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1713612236}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6a7e6f68625da0b45bdadc8bbc43a7e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RobotDialogueByDistance
+  interactionDistance: 2
+  lines:
+  - I got better shit to sell
+  - Just felt of the cpu
+  - Dont buy from him
+  player: {fileID: 1917236967}
+  fontAsset: {fileID: 11400000, guid: 81db8b07940d89a42a6d1f2e4922420c, type: 2}
+  labelHeightOffset: 1.8
+  labelScale: 0.01
 --- !u!1 &1759766067
 GameObject:
   m_ObjectHideFlags: 0
@@ -6313,6 +6615,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 6426657859980135442, guid: 274ea396f7c304841805ed40e26c44c0, type: 3}
       insertIndex: -1
       addedObject: {fileID: 328101326}
+    - targetCorrespondingSourceObject: {fileID: 6426657859980135442, guid: 274ea396f7c304841805ed40e26c44c0, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 328101332}
   m_SourcePrefab: {fileID: 100100000, guid: 274ea396f7c304841805ed40e26c44c0, type: 3}
 --- !u!1 &2104246589
 GameObject:
@@ -6514,3 +6819,4 @@ SceneRoots:
   - {fileID: 262485262}
   - {fileID: 1693772865}
   - {fileID: 700768972}
+  - {fileID: 1513168942}

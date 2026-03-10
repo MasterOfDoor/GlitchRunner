@@ -12,7 +12,7 @@ public class RobotLabel : MonoBehaviour
     [SerializeField] private List<string> lines = new List<string>();
 
     [Header("Etkileşim")]
-    [SerializeField] private float interactionRadius = 3f;
+    [SerializeField] private float interactionRadius = 4f;
     [SerializeField] private Transform player;
 
     /// <summary>0 = gizli, 1..N = o cümle gösteriliyor. Son cümleden sonra E = gizle ve IsDialogueFinished.</summary>
@@ -37,12 +37,31 @@ public class RobotLabel : MonoBehaviour
     [SerializeField] private float scale = 0.01f;
 
     private GameObject _labelRoot;
+    private float _nextFindPlayerTime;
 
     /// <summary>Tüm cümleler gösterilip E ile kapatıldıysa true. FinalTutorialRobot kaçışı buna göre başlatır.</summary>
     public bool IsDialogueFinished => _dialogueFinished;
 
+    private void TryFindPlayer()
+    {
+        if (player != null) return;
+        var p = GameObject.FindWithTag("Player");
+        if (p != null) { player = p.transform; return; }
+        var asil = FindObjectOfType<AsılScript>();
+        if (asil != null) { player = asil.transform; return; }
+        var female = FindObjectOfType<PlayerControllerFemale>();
+        if (female != null) player = female.transform;
+    }
+
     private void Start()
     {
+        if (tmpText == null && fontAsset == null)
+        {
+            if (TMP_Settings.defaultFontAsset != null)
+                fontAsset = TMP_Settings.defaultFontAsset;
+            if (fontAsset == null)
+                fontAsset = Resources.Load<TMP_FontAsset>("Fonts & Materials/LiberationSans SDF");
+        }
         if (tmpText == null && fontAsset != null)
             CreateLabelAtRuntime();
         ApplyStyleToCurrent();
@@ -51,49 +70,82 @@ public class RobotLabel : MonoBehaviour
         SetLabelVisible(false);
         BuildValidLineIndices();
 
-        if (player == null)
-        {
-            var p = GameObject.FindWithTag("Player");
-            if (p != null) player = p.transform;
-            if (player == null)
-            {
-                var asil = FindObjectOfType<AsılScript>();
-                if (asil != null) player = asil.transform;
-            }
-        }
+        TryFindPlayer();
+        _nextFindPlayerTime = Time.time + 1f;
     }
 
     private void Update()
     {
-        if (tmpText == null || player == null) return;
-
-        float dist = Vector2.Distance(transform.position, player.position);
-        bool inRange = dist <= interactionRadius;
-
-        if (inRange && Input.GetKeyDown(KeyCode.E))
+        if (player == null)
         {
-            if (_validLineIndices == null || _validLineIndices.Count == 0)
+            if (Time.time >= _nextFindPlayerTime)
             {
-                _dialogueFinished = true;
-                return;
+                TryFindPlayer();
+                _nextFindPlayerTime = Time.time + 1f;
             }
+            return;
+        }
+        if (tmpText == null)
+        {
+            if (fontAsset == null && TMP_Settings.defaultFontAsset != null)
+            {
+                fontAsset = TMP_Settings.defaultFontAsset;
+                CreateLabelAtRuntime();
+                ApplyStyleToCurrent();
+                BuildValidLineIndices();
+            }
+            return;
+        }
+    }
 
-            _displayState++;
-            if (_displayState > _validLineIndices.Count)
+    private void LateUpdate()
+    {
+        if (tmpText == null) return;
+
+        // E ile diyalog (oyuncu menzildeyse)
+        if (player != null && tmpText != null)
+        {
+            float dist = Vector2.Distance(transform.position, player.position);
+            bool inRange = dist <= interactionRadius;
+            if (inRange && Input.GetKeyDown(KeyCode.E))
             {
-                _displayState = 0;
-                SetLabelVisible(false);
-                _dialogueFinished = true;
-            }
-            else
-            {
-                SetLabelVisible(true);
-                string show = lines[_validLineIndices[_displayState - 1]];
-                tmpText.text = string.IsNullOrEmpty(show) ? " " : show;
-                if (_displayState == _validLineIndices.Count)
+                if (_validLineIndices == null || _validLineIndices.Count == 0)
+                {
                     _dialogueFinished = true;
+                }
+                else
+                {
+                    _displayState++;
+                    if (_displayState > _validLineIndices.Count)
+                    {
+                        _displayState = 0;
+                        SetLabelVisible(false);
+                        _dialogueFinished = true;
+                    }
+                    else
+                    {
+                        SetLabelVisible(true);
+                        string show = lines[_validLineIndices[_displayState - 1]];
+                        tmpText.text = string.IsNullOrEmpty(show) ? " " : show;
+                        if (_displayState == _validLineIndices.Count)
+                            _dialogueFinished = true;
+                    }
+                }
             }
         }
+
+        // Robot sola baktığında scale (-1,1,1) oluyor; yazı ters dönmesin diye label scale'ini telafi et
+        if (_labelRoot != null)
+        {
+            float s = scale;
+            if (transform.localScale.x < 0f)
+                s = -scale;
+            _labelRoot.transform.localScale = new Vector3(s, scale, scale);
+        }
+
+        var canvas = tmpText.GetComponentInParent<Canvas>();
+        if (canvas != null && canvas.renderMode == RenderMode.WorldSpace && canvas.worldCamera == null && Camera.main != null)
+            canvas.worldCamera = Camera.main;
     }
 
     private void BuildValidLineIndices()
@@ -113,24 +165,6 @@ public class RobotLabel : MonoBehaviour
             _labelRoot.SetActive(visible);
         else if (tmpText != null)
             tmpText.gameObject.SetActive(visible);
-    }
-
-    private void LateUpdate()
-    {
-        if (tmpText == null) return;
-
-        // Robot sola baktığında scale (-1,1,1) oluyor; yazı ters dönmesin diye label scale'ini telafi et
-        if (_labelRoot != null)
-        {
-            float s = scale;
-            if (transform.localScale.x < 0f)
-                s = -scale;
-            _labelRoot.transform.localScale = new Vector3(s, scale, scale);
-        }
-
-        var canvas = tmpText.GetComponentInParent<Canvas>();
-        if (canvas != null && canvas.renderMode == RenderMode.WorldSpace && canvas.worldCamera == null && Camera.main != null)
-            canvas.worldCamera = Camera.main;
     }
 
     private void CreateLabelAtRuntime()
