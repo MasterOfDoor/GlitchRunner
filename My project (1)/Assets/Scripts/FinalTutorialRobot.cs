@@ -22,6 +22,8 @@ public class FinalTutorialRobot : MonoBehaviour
     private RobotLabel _robotLabel;
     private Rigidbody2D _rb;
     private bool _isEscaping;
+    private float _nextFindPlayerTime;
+    private bool _hasLoggedPlayerNull;
 
     void Start()
     {
@@ -29,28 +31,38 @@ public class FinalTutorialRobot : MonoBehaviour
         _rb = GetComponent<Rigidbody2D>();
         _robotLabel = GetComponentInChildren<RobotLabel>(true);
         _isEscaping = false;
-        if (player == null)
-        {
-            var p = GameObject.FindWithTag("Player");
-            if (p != null) player = p.transform;
-            if (player == null)
-            {
-                var asil = FindObjectOfType<AsılScript>();
-                if (asil != null) player = asil.transform;
-                if (player == null)
-                {
-                    var female = FindObjectOfType<PlayerControllerFemale>();
-                    if (female != null) player = female.transform;
-                }
-            }
-        }
+        TryFindPlayer();
+        _nextFindPlayerTime = Time.time + 1f;
         if (escapePoint == null)
             Debug.LogWarning("FinalTutorialRobot: Escape Point atanmamış! Robota kaçış olmayacak — Inspector'dan Escape Point sürükle.");
     }
 
+    void TryFindPlayer()
+    {
+        if (player != null) return;
+        var p = GameObject.FindWithTag("Player");
+        if (p != null) { player = p.transform; return; }
+        var asil = FindObjectOfType<AsılScript>();
+        if (asil != null) { player = asil.transform; return; }
+        var female = FindObjectOfType<PlayerControllerFemale>();
+        if (female != null) player = female.transform;
+    }
+
     void Update()
     {
-        if (player == null) return;
+        if (player == null)
+        {
+            if (Time.time >= _nextFindPlayerTime)
+            {
+                TryFindPlayer();
+                _nextFindPlayerTime = Time.time + 1f;
+                if (player == null)
+                {
+                    if (!_hasLoggedPlayerNull) { _hasLoggedPlayerNull = true; Debug.LogWarning("FinalTutorialRobot: Oyuncu bulunamadı. Karaktere 'Player' tag'i veya AsılScript/PlayerControllerFemale ekleyin."); }
+                }
+            }
+            return;
+        }
 
         if (anim != null)
         {
@@ -72,7 +84,11 @@ public class FinalTutorialRobot : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (player == null) return;
+        if (player == null)
+        {
+            if (Time.time >= _nextFindPlayerTime) TryFindPlayer();
+            return;
+        }
         if (_isEscaping)
         {
             if (escapePoint == null) return;

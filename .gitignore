@@ -1,8 +1,18 @@
+# OS / editor
+node_modules/
+package-lock.json
+.DS_Store
+**/.DS_Store
+**/__MACOSX/
+**/._*
+.cursor/
+
 # Unity - ignore at any depth
 **/[Ll]ibrary/
 **/[Tt]emp/
 **/[Oo]bj/
 **/[Bb]uild/
+!webgl-deploy/[Bb]uild/
 **/[Bb]uilds/
 **/[Ll]ogs/
 **/[Uu]ser[Ss]ettings/

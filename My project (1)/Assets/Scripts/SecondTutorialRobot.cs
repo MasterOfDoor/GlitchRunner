@@ -29,6 +29,8 @@ public class SecondTutorialRobot : MonoBehaviour
 
     private RobotLabel _robotLabel;
     private Rigidbody2D _rb;
+    private float _nextFindPlayerTime;
+    private bool _hasLoggedPlayerNull;
     private enum State { Approaching, Talking, GoingToFall, Dead }
     private State _state = State.Approaching;
     private bool _hasTriggeredDeath;
@@ -38,32 +40,40 @@ public class SecondTutorialRobot : MonoBehaviour
         if (anim == null) anim = GetComponent<Animator>();
         _rb = GetComponent<Rigidbody2D>();
         _robotLabel = GetComponentInChildren<RobotLabel>(true);
-        if (player == null)
-        {
-            var p = GameObject.FindWithTag("Player");
-            if (p != null) player = p.transform;
-            if (player == null)
-            {
-                var asil = FindObjectOfType<AsılScript>();
-                if (asil != null) player = asil.transform;
-                if (player == null)
-                {
-                    var female = FindObjectOfType<PlayerControllerFemale>();
-                    if (female != null) player = female.transform;
-                }
-            }
-        }
+        TryFindPlayer();
+        _nextFindPlayerTime = Time.time + 1f;
+    }
+
+    void TryFindPlayer()
+    {
+        if (player != null) return;
+        var p = GameObject.FindWithTag("Player");
+        if (p != null) { player = p.transform; return; }
+        var asil = FindObjectOfType<AsılScript>();
+        if (asil != null) { player = asil.transform; return; }
+        var female = FindObjectOfType<PlayerControllerFemale>();
+        if (female != null) player = female.transform;
     }
 
     void OnEnable()
     {
         _state = State.Approaching;
         _hasTriggeredDeath = false;
+        _nextFindPlayerTime = Time.time + 0.5f;
     }
 
     void Update()
     {
-        if (player == null) return;
+        if (player == null)
+        {
+            if (Time.time >= _nextFindPlayerTime)
+            {
+                TryFindPlayer();
+                _nextFindPlayerTime = Time.time + 1f;
+                if (player == null && !_hasLoggedPlayerNull) { _hasLoggedPlayerNull = true; Debug.LogWarning("SecondTutorialRobot: Oyuncu bulunamadı. Karaktere 'Player' tag'i veya AsılScript/PlayerControllerFemale ekleyin."); }
+            }
+            return;
+        }
 
         if (anim != null)
             anim.SetBool("isWalking", (_state == State.Approaching && !stayInPlace) || _state == State.GoingToFall);
@@ -94,8 +104,8 @@ public class SecondTutorialRobot : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (player == null) { if (Time.time >= _nextFindPlayerTime) TryFindPlayer(); return; }
         if (_state == State.Dead || _state == State.Talking) return;
-        if (player == null) return;
         if (_state == State.GoingToFall && fallTarget != null)
         {
             MoveTo(fallTarget.position, runSpeed);
