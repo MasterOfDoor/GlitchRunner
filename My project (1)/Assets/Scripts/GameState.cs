@@ -36,6 +36,7 @@ public class GameState : MonoBehaviour
 
     void Awake()
     {
+        Debug.Log("[DBG] GameState.Awake");
         if (Instance != null && Instance != this)
         {
             Destroy(gameObject);

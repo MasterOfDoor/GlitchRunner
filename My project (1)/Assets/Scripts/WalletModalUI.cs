@@ -53,6 +53,7 @@ public class WalletModalUI : MonoBehaviour
 
     void Awake()
     {
+        Debug.Log("[DBG] WalletModalUI.Awake");
         if (modalGroup)
         {
             modalGroup.alpha          = 0f;

@@ -2,9 +2,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using System.Collections;
-#if UNITY_EDITOR
-using System.IO;
-#endif
 
 public class GlitchrunnerIntro : MonoBehaviour
 {
@@ -44,9 +41,6 @@ public class GlitchrunnerIntro : MonoBehaviour
 
     void AdvanceIntro()
     {
-        // #region agent log
-        AgentLog("AdvanceIntro.entry", "called", "currentIndex=" + currentIndex + " len=" + (introSprites != null ? introSprites.Length : 0) + " hasRequested=" + _hasRequestedSceneLoad, "H1");
-        // #endregion
         if (_hasRequestedSceneLoad) return;
         currentIndex++;
 
@@ -58,7 +52,7 @@ public class GlitchrunnerIntro : MonoBehaviour
         else
         {
             // Karikatür bitince her zaman öğretici sahneye geç (Inspector’daki değer yok sayılır)
-            AgentLog("AdvanceIntro.else", "defer LoadScene next frame", "currentIndex=" + currentIndex, "H2");
+            Debug.Log("[DBG] GlitchrunnerIntro: son kare, sahne geçişi başlatılıyor");
             _hasRequestedSceneLoad = true;
             isTransitioning = true;
             StartCoroutine(DeferredLoadOgreticiSahne());
@@ -67,25 +61,20 @@ public class GlitchrunnerIntro : MonoBehaviour
 
     const string TutorialSceneName = "OgreticiSahne";
 
-    // #region agent log
-    static void AgentLog(string location, string message, string data, string hypothesisId)
-    {
-        long ts = (long)(System.DateTime.UtcNow - new System.DateTime(1970, 1, 1)).TotalMilliseconds;
-        string line = "{\"sessionId\":\"ca9fc4\",\"hypothesisId\":\"" + hypothesisId + "\",\"location\":\"" + location + "\",\"message\":\"" + message + "\",\"data\":\"" + (data ?? "") + "\",\"timestamp\":" + ts + "}";
-#if UNITY_EDITOR
-        try { File.AppendAllText(Path.GetFullPath(Path.Combine(Application.dataPath, "../../debug-ca9fc4.log")), line + "\n"); } catch { }
-#endif
-        Debug.Log("[DEBUG " + hypothesisId + "] " + location + " | " + message + " | " + data);
-    }
-    // #endregion
-
     IEnumerator DeferredLoadOgreticiSahne()
     {
-        yield return null; // bir frame bekle: aynı frame re-entry önlenir
-        // #region agent log
-        AgentLog("DeferredLoadOgreticiSahne", "calling LoadScene", TutorialSceneName, "H5");
-        // #endregion
-        SceneManager.LoadScene(TutorialSceneName);
+        yield return null; // bir frame bekle
+        // WebGL'de senkron LoadScene call stack taşır; async kullan
+        Debug.Log("Intro bitti, sahne yükleniyor: " + TutorialSceneName);
+        var op = SceneManager.LoadSceneAsync(TutorialSceneName);
+        if (op != null)
+        {
+            op.allowSceneActivation = true;
+            while (!op.isDone)
+                yield return null;
+        }
+        else
+            SceneManager.LoadScene(TutorialSceneName);
     }
 
     IEnumerator FadeToNextSprite(Sprite nextSprite)

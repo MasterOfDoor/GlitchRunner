@@ -21,8 +21,14 @@ public class EnvBootstrap : MonoBehaviour
         public string AVALANCHE_DISTRIBUTOR_ADDRESS;
     }
 
+    void Awake()
+    {
+        Debug.Log("[DBG] EnvBootstrap.Awake");
+    }
+
     void Start()
     {
+        Debug.Log("[DBG] EnvBootstrap.Start");
         StartCoroutine(FetchConfigAndCreateGameState());
     }
 

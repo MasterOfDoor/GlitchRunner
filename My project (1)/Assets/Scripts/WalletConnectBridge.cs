@@ -9,6 +9,23 @@ using Reown.AppKit.Unity;
 public static class WalletConnectBridge
 {
     const string EnvDevWallet = "DEV_WALLET_ADDRESS";
+    const string FallbackOrigin = "https://glitchrunnertest.vercel.app";
+
+    /// <summary>WebGL'de oyunun açıldığı origin (local vs Vercel); WalletConnect metadata ile eşleşmeli.</summary>
+    static string GetAppOrigin()
+    {
+        try
+        {
+            var u = Application.absoluteURL;
+            if (!string.IsNullOrEmpty(u))
+            {
+                var uri = new Uri(u);
+                return uri.GetLeftPart(UriPartial.Authority);
+            }
+        }
+        catch { }
+        return FallbackOrigin;
+    }
 
     /// <summary>Cüzdan bağlanır; adres onAddress ile döner, hata onError ile.</summary>
     public static void ConnectAsync(Action<string> onAddress, Action<string> onError)
@@ -53,11 +70,12 @@ public static class WalletConnectBridge
         if (AppKit.Instance == null || AppKit.IsInitialized) return;
         try
         {
+            var origin = GetAppOrigin();
             var metadata = new Metadata(
                 name: "GlitchRunner",
                 description: "On-chain puzzle platformer",
-                url: "https://glitchrunner.example.com",
-                iconUrl: "https://glitchrunner.example.com/logo.png"
+                url: origin,
+                iconUrl: origin + "/logo.png"
             );
             var avalancheFuji = new Chain(
                 ChainConstants.Namespaces.Evm,
@@ -94,11 +112,12 @@ public static class WalletConnectBridge
         {
             if (!AppKit.IsInitialized)
             {
+                var origin = GetAppOrigin();
                 var metadata = new Metadata(
                     name: "GlitchRunner",
                     description: "On-chain puzzle platformer",
-                    url: "https://glitchrunner.example.com",
-                    iconUrl: "https://glitchrunner.example.com/logo.png"
+                    url: origin,
+                    iconUrl: origin + "/logo.png"
                 );
 
                 // Avalanche Fuji (eip155:43113) — oyun token'ı bu ağda; cüzdan ETH yerine Fuji'ye geçsin

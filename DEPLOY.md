@@ -59,6 +59,25 @@ Vercel Dashboard → Proje → **Settings → Environment Variables** bölümün
 
 ---
 
+## Local çalışıyor, Vercel çalışmıyor — kontrol listesi
+
+1. **Aynı build Vercel’de mi?**  
+   Local’de çalışan build’i alıp **webgl-deploy**’a kopyaladıktan sonra **commit + push** yaptığından emin ol. Eski bir build Vercel’de kalıyorsa (stack overflow vb.) yeni düzeltmeler yansımaz.
+
+2. **Git LFS açık mı?**  
+   `webgl-deploy/Build/*.data` dosyaları Git LFS ile takip ediliyor. **Vercel Dashboard → Settings → Git → Git LFS** bölümünden **Git LFS’i etkinleştir**, ardından **Redeploy** yap. LFS kapalıysa WEBGL.data gerçek dosya yerine pointer olarak sunulur, oyun açılmayabilir veya "Unknown data format" hatası alırsın.
+
+3. **Root Directory**  
+   **Settings → General → Root Directory** = `webgl-deploy` olmalı.
+
+4. **api/config**  
+   `webgl-deploy/api/config.js` repoda var olmalı; 404 olsa bile oyun varsayılan REOWN_PROJECT_ID ile açılır, ama env değişkenleri için Vercel’de **Environment Variables** (en azından `REOWN_PROJECT_ID`) tanımlı olsun.
+
+5. **Metadata URL**  
+   WalletConnect metadata artık oyunun açıldığı adrese göre ayarlanıyor (local → localhost, Vercel → glitchrunnertest.vercel.app). Eski "metadata.url differs from actual page url" uyarısı böylece azalır.
+
+---
+
 ## Notlar
 
 - **Sıkıştırma:** Unity’de Compression Format = **Disabled** kullan. Vercel CDN tek sefer sıkıştırır; Unity’de Brotli/Gzip açıksa çift sıkıştırma hatası alırsın.
