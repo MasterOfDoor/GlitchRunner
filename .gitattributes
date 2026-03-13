@@ -1,1 +1,2 @@
 webgl-deploy/Build/*.data filter=lfs diff=lfs merge=lfs -text
+webgl-deploy/Build/*.wasm filter=lfs diff=lfs merge=lfs -text
