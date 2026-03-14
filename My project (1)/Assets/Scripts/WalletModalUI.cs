@@ -69,15 +69,22 @@ public class WalletModalUI : MonoBehaviour
     void Start() { StartCoroutine(WaitAndSubscribe()); }
 
     // AppKit hazır olana kadar bekle; WebGL'de prefab varsa initialize tetikle.
+    // WebGL: WaitForSeconds wasm stack'i doldurabiliyor; frame counter kullanıyoruz.
     IEnumerator WaitAndSubscribe()
     {
         int attempts = 0;
         const int maxAttempts = 30;
-        const float interval = 0.5f;
+        const int framesPerAttempt = 30; // ~0.5s at 60fps
+        int frameCount = 0;
 
         while (attempts < maxAttempts)
         {
-            yield return new WaitForSeconds(interval);
+            while (frameCount < framesPerAttempt)
+            {
+                frameCount++;
+                yield return null;
+            }
+            frameCount = 0;
             attempts++;
             try
             {
